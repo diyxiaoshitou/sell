@@ -1,9 +1,27 @@
-/**
- *
- * @created on : 2017/2/25,
- * @author     : zhang.junfeng[zhang.junfeng@rhxtune.com]
- * @version    : 1.0
- * @copyright  : Copyright(c) 2016 北京瑞华信通信息技术有限公司
- *
- */
-    
+export function formatDate(date, fmt) {
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+  }
+
+  let o = {
+    'M+': date.getMonth() + 1,
+    'd+': date.getDate(),
+    'h+': date.getHours(),
+    'm+': date.getMinutes(),
+    's+': date.getSeconds()
+  };
+
+  for (let k in o) {
+    if ((new RegExp(`(${k})`)).test(fmt)) {
+      let str = o[k] + ''; // 转换成字符串
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str));
+    }
+  }
+  return fmt;
+}
+
+// 1位数值补0
+function padLeftZero(str) {
+  return ('00' + str).substr(str.length);
+}
+

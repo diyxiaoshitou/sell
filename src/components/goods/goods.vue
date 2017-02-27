@@ -115,6 +115,7 @@
           return;
         }
         this.selectedFoods = food;
+        // 初始化food组件的show方法
         this.$refs.food.show();
       },
       _drop(target) {
