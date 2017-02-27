@@ -6,7 +6,7 @@ Vue.js 高仿饿了么外卖 App 源码,演示地址 https://diyxiaoshitou.githu
 
 ## 技术栈
 
-vue + vue-router  + webpack + ES6/7 + Less + flex + svg 等
+vue + vue-router  + webpack + ES6/7 + stylus + flex + svg 等
 
 ## 安装和构建 （nodejs 6.0+）
     克隆，或者直接下载
