@@ -5,7 +5,7 @@ Vue.js 高仿饿了么外卖 App 课程源码,演示地址 https://diyxiaoshitou
 
 [项目显示地址](https://diyxiaoshitou.github.io/sell-demo/#!/goods)
 
-![演示地址](http://ogn56czkt.bkt.clouddn.com/sell_qrcode.png =40)
+![演示地址](http://ogn56czkt.bkt.clouddn.com/sell_qrcode.png )
 
 
 
