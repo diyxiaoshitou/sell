@@ -1,5 +1,5 @@
 <template>
-  <div class="seller" v-el:seller>
+  <div class="seller" ref="seller">
     <div class="seller-content">
       <div class="overview">
         <h1 class="title">{{seller.name}}</h1>
@@ -42,9 +42,9 @@
           <p class="content">{{seller.bulletin}}</p>
         </div>
         <ul v-if="seller.supports" class="supports">
-          <li class="support-item  border-1px" v-for="item in seller.supports">
-            <span class="icon" :class="classMap[seller.supports[$index].type]"></span>
-            <span class="text">{{item.description}}</span>
+          <li class="support-item  border-1px" v-for="(item,index) in seller.supports">
+            <span class="icon" :class="classMap[seller.supports[index].type]"></span>
+            <span class="text">{{seller.supports[index].description}}</span>
           </li>
         </ul>
       </div>
@@ -53,9 +53,10 @@
 
       <div class="pics">
         <h1 class="title">商家实景</h1>
-        <div class="pic-wrapper" v-el:pic-wrapper>
-          <ul class="pic-list" v-el:pic-list>
+        <div class="pic-wrapper" ref="picWrapper">
+          <ul class="pic-list" ref="picList">
             <li class="pic-item" v-for="pic in seller.pics">
+              {{pic}}
               <img :src="pic" width="120" height="90">
             </li>
           </ul>
@@ -102,23 +103,26 @@
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
     },
     // 生命周期是页面渲染以后执行，
-    ready() {
-      // better-scroll 依赖于 dom 必须等 dom 渲染完后才能正确执行,优先于 watch
-      this._initScroll();
-      this._initPics();
-    },
     watch: {
       // 监听 seller 的变化，一有数据，才初始化 better-scroll
       'seller'() {
-        this._initScroll();
-        this._initPics();
+        this.$nextTick(() => {
+          this._initScroll();
+          this._initPics();
+        });
       }
     },
     methods: {
-      //  better-scroll 初始化方法
+      toggleFavorite(event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.favorite = !this.favorite;
+        saveToLocal(this.seller.id, 'favorite', this.favorite);
+      },
       _initScroll() {
         if (!this.scroll) {
-          this.scroll = new BScroll(this.$els.seller, {
+          this.scroll = new BScroll(this.$refs.seller, {
             click: true
           });
         } else {
@@ -126,16 +130,15 @@
         }
       },
       _initPics() {
-        // 设置 ul 的宽度,添加横向滚动
         if (this.seller.pics) {
           let picWidth = 120;
           let margin = 6;
           let width = (picWidth + margin) * this.seller.pics.length - margin;
-          this.$els.picList.style.width = width + 'px';
+          this.$refs.picList.style.width = width + 'px';
           this.$nextTick(() => {
             if (!this.picScroll) {
-              this.picScroll = new BScroll(this.$els.picWrapper, {
-                scrollX: true, // 横向滚动
+              this.picScroll = new BScroll(this.$refs.picWrapper, {
+                scrollX: true,
                 eventPassthrough: 'vertical'
               });
             } else {
@@ -143,13 +146,6 @@
             }
           });
         }
-      },
-      toggleFavorite(event) {
-        if (!event._constructed) {
-          return;
-        }
-        this.favorite = !this.favorite;
-        saveToLocal(this.seller.id, 'favorite', this.favorite);
       }
 
     },

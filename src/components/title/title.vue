@@ -21,6 +21,7 @@
   .v_title
     display: flex
     width: 80%
+    margin: 0 36px
     .line
       flex: 1
       position: relative

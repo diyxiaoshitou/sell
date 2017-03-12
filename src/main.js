@@ -11,22 +11,34 @@ import 'common/stylus/index.styl';
 Vue.use(VueRouter);
 Vue.use(VueResource);
 
-let app = Vue.extend(App);
-let router = new VueRouter({
-  linkActiveClass: 'active'
-});
-
-router.map({
-  '/goods': {
+const routes = [
+  {
+    path: '/',
     component: goods
   },
-  '/ratings': {
+  {
+    path: '/goods',
+    component: goods
+  },
+  {
+    path: '/ratings',
     component: ratings
   },
-  'seller': {
+  {
+    path: '/seller',
     component: seller
   }
+];
+
+const router = new VueRouter({
+  linkActiveClass: 'active',
+  routes
 });
 
-router.start(app, '#app');
-// router.go('/goods');
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  render: h => h(App)
+});
+

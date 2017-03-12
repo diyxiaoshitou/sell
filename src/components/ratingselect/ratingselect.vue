@@ -64,17 +64,16 @@
         if (!event._constructed) {
           return;
         }
-        this.selectType = type;
+        // this.selectType = type;
         // 子组件变动时，通知父组件
-        this.$dispatch('ratingtype.select', type);
+        this.$emit('select', type);
       },
       toggleContent(event) {
         if (!event._constructed) {
           return;
         }
-        this.onlyContent = !this.onlyContent;
         // 子组件变动时，通知父组件
-        this.$dispatch('content.toggle', this.onlyContent);
+        this.$emit('toggle');
       }
     }
   };

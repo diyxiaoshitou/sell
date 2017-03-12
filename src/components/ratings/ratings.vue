@@ -1,5 +1,5 @@
 <template>
-  <div class="ratings" v-el:ratings>
+  <div class="ratings" ref="ratings">
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
@@ -27,7 +27,7 @@
 
       <split></split>
 
-      <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="ratings"></ratingselect>
+      <ratingselect @select="selectRating" @toggle="toggleContent" :selectType="selectType" :onlyContent="onlyContent" :ratings="ratings"></ratingselect>
 
       <div class="rating-wrapper">
         <ul>
@@ -44,7 +44,7 @@
               <p class="text">{{rating.text}}</p>
               <div class="recommend" v-show="rating.recommend && rating.recommend.length">
                 <span class="icon-thumb_up"></span>
-                <span v-for="item in rating.recommend" class="recommend-item">{{item}}</span>
+                <span v-for="item in rating.recommend" class="item">{{item}}</span>
               </div>
               <div class="time">
                 {{rating.rateTime | formatDate}}
@@ -88,7 +88,7 @@
         if (response.errno === ERR_OK) {
           this.ratings = response.data;
           this.$nextTick(() => {
-            this.scroll = new BScroll(this.$els.ratings, {
+            this.scroll = new BScroll(this.$refs.ratings, {
               click: true
             });
           });
@@ -105,18 +105,15 @@
         } else {
           return type === this.selectType;
         }
-      }
-    },
-    // 接受子组件的变动
-    events: {
-      'ratingtype.select'(type) {
+      },
+      selectRating(type) {
         this.selectType = type;
         this.$nextTick(() => {
           this.scroll.refresh();
         });
       },
-      'content.toggle'(onlycontent) {
-        this.onlyContent = onlycontent;
+      toggleContent() {
+        this.onlyContent = !this.onlyContent;
         this.$nextTick(() => {
           this.scroll.refresh();
         });
@@ -250,13 +247,13 @@
           .recommend
             line-height: 16px
             font-size: 0
-            .icon-thumb_up, .recommend-item
+            .icon-thumb_up, .item
               display: inline-block
               margin: 0 8px 4px 0
             .icon-thumb_up
               font-size: 12px
               color: rgb(0, 160, 220)
-            .recommend-item
+            .item
               padding: 0 6px
               border: 1px solid rgba(7, 17, 27, 0.1)
               border-radius: 1px
